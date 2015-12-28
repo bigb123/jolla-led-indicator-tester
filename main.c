@@ -29,8 +29,9 @@ char *get_addr(colors color){
 	
 	const char *addr_beg = "/sys/devices/platform/msm_ssbi.0/pm8038-core/pm8xxx-led/leds/led:rgb_";
 	const char *addr_end = "/brightness";
-	char cat_addr[strlen(addr_beg)+strlen(addr_end)+6];		// will keep address here
-	short size_of_cat_addr = sizeof(cat_addr), i;
+	const int size_of_cat_addr = strlen(addr_beg)+strlen(addr_end)+6;
+	char cat_addr[size_of_cat_addr];		// will keep address here
+	short i;
 	
 	// VERY IMPORTANT erase potential data from memory (without - problems with memory wastes)
 	for(i = 0; i < size_of_cat_addr; ++i)
@@ -126,10 +127,10 @@ void set_brightness(FILE *led_file, short brightness_value){
 // handling file operations - useful for single value setting
 void set_brightness_file(colors color, short brightness_value){
 	
-	char *addr = get_addr(color);		// get led file address
+	char *addr = get_addr(color);		/* get led file address*/
 	FILE *led_file = fopen(addr, "r+");
 	
-	// check if file was being opened
+	/* check if file was being opened*/
 	check_access(led_file, addr);
 	
 	set_brightness(led_file, brightness_value);
@@ -146,9 +147,9 @@ void reset_led(FILE *led_file){
 
 
 void print_usage(){
-	printf("%s [[-r red_bright_value] [-g green_bright_value] [-b blue_bright_value]] [-t] [-v] [-h]\n\n"
+	printf("%s [[-r 0-255] [-g 0-255] [-b 0-255]] [-t] [-v] [-h]\n\n", program_name);
 	
-	"Program to test RGB led in Jolla phone\n\n"
+	printf("Program to test RGB led indicator in Jolla phone\n\n"
 	
 	"Usage: %s options [value (from 0 to 255)]\n"
 	"where: \n"
@@ -158,7 +159,7 @@ void print_usage(){
 	"  -b  --blue              set blue led brightness\n"
 	"  -t  --test              test all leds turning them on and off one by one and all at the end\n"
 	"  -i  --info-values       inform about actual setted brightness\n"
-	, program_name, program_name
+	, program_name
 	);
 }
 
@@ -176,7 +177,7 @@ void test(){
 		led_file = fopen(addr, "r+");
 		check_access(led_file, addr);
 		
-		reset_led(led_file); // initial state for led
+		reset_led(led_file); /* initial state for led*/
 		
 		for(brightness_level = MIN_BRIGHT; brightness_level <= MAX_BRIGHT; ++brightness_level){
 			set_brightness(led_file, brightness_level);
@@ -188,7 +189,7 @@ void test(){
 			usleep(1000);
 		}
 		
-		reset_led(led_file); // initial state for led
+		reset_led(led_file); /* initial state for led*/
 		
 		fclose(led_file);
 		free(addr);
