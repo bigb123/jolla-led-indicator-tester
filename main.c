@@ -11,29 +11,31 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> 	// to slow down brightness change
+#include <unistd.h> 	/* to slow down brightness change */
 #include <string.h>
 #include <getopt.h>
 
 #define MIN_BRIGHT 0
 #define MAX_BRIGHT 255
 
-typedef enum {RED, GREEN, BLUE} colors;		// avaliable base colors
+typedef enum {RED, GREEN, BLUE} colors;		/* avaliable base colors */
 
 
 const char *program_name;
 
 
-// return address of the led file
+/* return address of the led file */
 char *get_addr(colors color){
 	
 	const char *addr_beg = "/sys/devices/platform/msm_ssbi.0/pm8038-core/pm8xxx-led/leds/led:rgb_";
 	const char *addr_end = "/brightness";
-	const int size_of_cat_addr = strlen(addr_beg)+strlen(addr_end)+6;
-	char cat_addr[size_of_cat_addr];		// will keep address here
+	const int size_of_cat_addr = 70 + 10 + 6;	/* chars amount in addr_beg, addr_end and place to keep 
+												 * "red", "green" or "blue" word + null character
+												 */
+	char cat_addr[size_of_cat_addr];		/* will keep address here */
 	short i;
-	
-	// VERY IMPORTANT erase potential data from memory (without - problems with memory wastes)
+
+	/* VERY IMPORTANT erase potential data from memory (without - problems with memory wastes) */
 	for(i = 0; i < size_of_cat_addr; ++i)
 		cat_addr[i] = '\0';
 	
@@ -65,7 +67,7 @@ char *get_addr(colors color){
 }
 
 
-// checks if led file is accessible
+/* checks if led file is accessible */
 void check_access(FILE *led_file, char *addr){
 	
 	if (NULL == led_file){
@@ -77,11 +79,11 @@ void check_access(FILE *led_file, char *addr){
 
 int get_brightness(FILE *led_file){
 	
-	char *line = NULL;		// will keep brightness level as string
+	char *line = NULL;		/* will keep brightness level as string */
 	char *ret_val = NULL;	
-	size_t len = 0;			// size of buffer (will be set automatically)
+	size_t len = 0;			/* size of buffer (will be set automatically) */
 	
-	rewind(led_file);		// go to start of file
+	rewind(led_file);		/* go to start of file */
 	
 	getline(&line, &len, led_file);
 	ret_val = line;
@@ -93,10 +95,10 @@ int get_brightness(FILE *led_file){
 
 int get_brightness_file(colors color){
 	
-	char *addr = get_addr(color);		// get led file address
+	char *addr = get_addr(color);		/* get led file address */
 	FILE *led_file = fopen(addr, "r");
 	
-	// check if file was being opened
+	/* check if file was being opened */
 	check_access(led_file, addr);
 	
 	int ret_val = get_brightness(led_file);
@@ -110,13 +112,13 @@ int get_brightness_file(colors color){
 
 void set_brightness(FILE *led_file, short brightness_value){
 	
-	// check if brightness_value is not less than smallest value and more than highest value
+	/* check if brightness_value is not less than smallest value and more than highest value */
 	if ((MAX_BRIGHT < brightness_value) || (MIN_BRIGHT > brightness_value)){
 		printf("Value must be between %d and %d\n", MIN_BRIGHT, MAX_BRIGHT);
 		exit(2);
 	}
 		
-	char char_value[3]; 	// this will keep char value of brightness level
+	char char_value[3]; 	/* this will keep char value of brightness level */
 	
 	sprintf(char_value, "%d", brightness_value);
 	fputs(char_value, led_file);
@@ -124,7 +126,7 @@ void set_brightness(FILE *led_file, short brightness_value){
 }
 
 
-// handling file operations - useful for single value setting
+/* handling file operations - useful for single value setting */
 void set_brightness_file(colors color, short brightness_value){
 	
 	char *addr = get_addr(color);		/* get led file address*/
@@ -140,7 +142,7 @@ void set_brightness_file(colors color, short brightness_value){
 }
 
 
-// wrapper: set led to value 0
+/* wrapper: set led to value 0 */
 void reset_led(FILE *led_file){
 	set_brightness(led_file, 0);
 }
@@ -200,11 +202,11 @@ void test(){
 int main(int argc, char *argv[]){
 
 	program_name = argv[0];
-	int next_option; // number of option
+	int next_option; /* number of option */
 	char *red = NULL, *green = NULL, *blue = NULL;
-	short test_bool = 0, info_values = 0;		// if test mode was requested by user
+	short test_bool = 0, info_values = 0;		/* if test mode was requested by user */
 	
-	// program arguments
+	/* program arguments */
 	
 	const char* const short_options = "hr:g:b:ti";
 	
