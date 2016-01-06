@@ -216,9 +216,26 @@ void test(){
 }
 
 
+// char *
+void set_program_name(char *longname){
+	
+	char *name_ptr = longname;
+	
+	while(*longname != '\0'){
+		if('/' == longname[0]){
+			name_ptr = ++longname;
+			continue;
+		}
+		
+		++longname;
+	}
+	program_name = name_ptr;
+}
+
+
 int main(int argc, char *argv[]){
 
-	program_name = argv[0];
+	set_program_name(argv[0]);
 	int next_option; /* number of option */
 	char *red = NULL, *green = NULL, *blue = NULL;
 	short test_bool = 0, info_values = 0, reset = 0;
@@ -277,7 +294,7 @@ int main(int argc, char *argv[]){
 		
 	} while (next_option != -1);
 	
-	/* if no arguments print help */
+	/* if no arguments - print help */
 	if (1 == optind)
 		print_usage();
 	
