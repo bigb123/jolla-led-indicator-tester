@@ -216,20 +216,22 @@ void test(){
 }
 
 
-// char *
 void set_program_name(char *longname){
 	
-	char *name_ptr = longname;
+	char *name_ptr = NULL;
 	
-	while(*longname != '\0'){
-		if('/' == longname[0]){
-			name_ptr = ++longname;
-			continue;
-		}
-		
-		++longname;
+	while((name_ptr = *longname++) != '\0'){
+		printf("dziala\n");
 	}
-	program_name = name_ptr;
+// 		if('/' == longname[0]){
+// 			name_ptr = ++longname;
+// 			continue;
+// 		}
+// 		
+// 		++longname;
+// 	}
+// 	program_name = name_ptr;
+	program_name = longname;
 }
 
 
