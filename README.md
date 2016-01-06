@@ -16,7 +16,7 @@ make
 will produce <b>leds_modificator</b> executable program.
 
 ## Execution
-Example:
+Example:<br>
 After execution
 ```
 leds_modificator -r 100
