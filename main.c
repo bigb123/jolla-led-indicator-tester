@@ -147,6 +147,23 @@ void reset_led(FILE *led_file){
 }
 
 
+/* reset all leds */
+void reset_all(){
+	
+	short color;
+	char *addr;
+	FILE *led_file;
+	
+	for(color = RED; color <= BLUE; ++color) {
+		addr = get_addr(color);
+		led_file = fopen(addr, "w");
+		check_access(led_file, addr);
+		
+		reset_led(led_file);
+	}
+}
+
+
 void print_usage(){
 	printf("%s [[-r 0-255] [-g 0-255] [-b 0-255]] [-t] [-v] [-h]\n\n", program_name);
 	
@@ -160,6 +177,7 @@ void print_usage(){
 	"  -b  --blue              set blue led brightness\n"
 	"  -t  --test              test all leds turning them on and off one by one\n"
 	"  -i  --info-values       inform about actual setted brightness\n"
+	"  -0  --reset             set all led values to 0\n"
 	, program_name
 	);
 }
@@ -203,11 +221,11 @@ int main(int argc, char *argv[]){
 	program_name = argv[0];
 	int next_option; /* number of option */
 	char *red = NULL, *green = NULL, *blue = NULL;
-	short test_bool = 0, info_values = 0;		/* if test mode was requested by user */
+	short test_bool = 0, info_values = 0, reset = 0;
 	
 	/* program arguments */
 	
-	const char* const short_options = "hr:g:b:ti";
+	const char* const short_options = "hr:g:b:ti0";
 	
 	const struct option long_options[] = {
 		{"help",				0, NULL, 'h'},
@@ -216,6 +234,7 @@ int main(int argc, char *argv[]){
 		{"blue",				1, NULL, 'b'},
 		{"test",				0, NULL, 't'},
 		{"info-values",			0, NULL, 'i'},
+		{"reset",				0, NULL, '0'},
 		{NULL, 					0, NULL, 0}
 	};
 	
@@ -248,34 +267,45 @@ int main(int argc, char *argv[]){
 			info_values = 1;
 			break;
 			
+		case '0':
+			reset = 1;
+			break;
+			
 		default:
-// 			print_usage();
-// 			abort ();
 			break;
 		}
 		
 	} while (next_option != -1);
 	
+	/* if no arguments print help */
+	if (1 == optind)
+		print_usage();
+	
+	if (1 == reset)
+		reset_all();
+	
+	/* test all leds or set values for them and print info */
 	if (test_bool)
 		test();
-	
-	if (NULL != red)
-		set_brightness_file(RED, atoi(red));
+	else {
+		if (NULL != red)
+			set_brightness_file(RED, atoi(red));
 
-	if (NULL != green)
-		set_brightness_file(GREEN, atoi(green));
-	
-	if (NULL != blue)
-		set_brightness_file(BLUE, atoi(blue));
-	
-	if (info_values){
-		printf( "red:      %d\n"
-				"green:    %d\n"
-				"blue:     %d\n", 
-		get_brightness_file(RED), 
-		get_brightness_file(GREEN), 
-		get_brightness_file(BLUE));
+		if (NULL != green)
+			set_brightness_file(GREEN, atoi(green));
+		
+		if (NULL != blue)
+			set_brightness_file(BLUE, atoi(blue));
+		
+		if (info_values){
+			printf( "red:      %d\n"
+					"green:    %d\n"
+					"blue:     %d\n", 
+			get_brightness_file(RED), 
+			get_brightness_file(GREEN), 
+			get_brightness_file(BLUE));
+		}
 	}
 	
-	return 0;	
+	return 0;
 }
