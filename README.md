@@ -40,3 +40,6 @@ where:
   -i  --info-values       inform about actual setted brightness
   -0  --reset             set all led values to 0
 ```
+
+## Observed issues
+In test mode when phone enters in energy-saving mode (the screen goes black) led can hang for a while. Turn on screen with tapping or clicking on/off button to go back to normal mode.
