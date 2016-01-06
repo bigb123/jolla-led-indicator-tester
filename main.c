@@ -33,11 +33,12 @@ char *get_addr(colors color){
 												 * "red", "green" or "blue" word + null character
 												 */
 	char cat_addr[size_of_cat_addr];		/* will keep address here */
-	short i;
+// 	short i;
 
 	/* VERY IMPORTANT erase potential data from memory (without - problems with memory wastes) */
-	for(i = 0; i < size_of_cat_addr; ++i)
-		cat_addr[i] = '\0';
+// 	memset(cat_addr, size_of_cat_addr, 0);
+// 	for(i = 0; i < size_of_cat_addr; ++i)
+// 		cat_addr[i] = '\0';
 	
 	strncat(cat_addr, addr_beg, strlen(addr_beg));
 	
@@ -61,7 +62,7 @@ char *get_addr(colors color){
 	
 	strncat(cat_addr, addr_end, strlen(addr_end));
 	
-	char *final_addr = malloc(sizeof(char) * size_of_cat_addr);
+	char *final_addr = calloc(size_of_cat_addr, sizeof(char));
 	strncpy(final_addr, cat_addr, size_of_cat_addr);
 	return final_addr;
 }
@@ -217,7 +218,7 @@ int main(int argc, char *argv[]){
 		{"blue",				1, NULL, 'b'},
 		{"test",				0, NULL, 't'},
 		{"info-values",			0, NULL, 'i'},
-		{NULL, 		0, NULL, 0}
+		{NULL, 					0, NULL, 0}
 	};
 	
 	do {
