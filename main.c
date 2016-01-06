@@ -33,12 +33,9 @@ char *get_addr(colors color){
 												 * "red", "green" or "blue" word + null character
 												 */
 	char cat_addr[size_of_cat_addr];		/* will keep address here */
-// 	short i;
 
 	/* VERY IMPORTANT erase potential data from memory (without - problems with memory wastes) */
-// 	memset(cat_addr, size_of_cat_addr, 0);
-// 	for(i = 0; i < size_of_cat_addr; ++i)
-// 		cat_addr[i] = '\0';
+	memset(&cat_addr, '\0', size_of_cat_addr);
 	
 	strncat(cat_addr, addr_beg, strlen(addr_beg));
 	
@@ -72,7 +69,8 @@ char *get_addr(colors color){
 void check_access(FILE *led_file, char *addr){
 	
 	if (NULL == led_file){
-		printf("Error accessing file: %s\n", addr);
+		printf("Error accessing file: %s\n\n"
+		"Maybe no access rights?\n", addr);
 		exit(1);
 	}
 }
@@ -130,7 +128,7 @@ void set_brightness(FILE *led_file, short brightness_value){
 /* handling file operations - useful for single value setting */
 void set_brightness_file(colors color, short brightness_value){
 	
-	char *addr = get_addr(color);		/* get led file address*/
+	char *addr = get_addr(color);/* get led file address*/
 	FILE *led_file = fopen(addr, "r+");
 	
 	/* check if file was being opened*/
@@ -156,11 +154,11 @@ void print_usage(){
 	
 	"Usage: %s options [value (from 0 to 255)]\n"
 	"where: \n"
-	"  -h  --help              dispplay this help message\n"
+	"  -h  --help              display this help message\n"
 	"  -r  --red               set red led brightness\n"
 	"  -g  --green             set green led brightness\n"
 	"  -b  --blue              set blue led brightness\n"
-	"  -t  --test              test all leds turning them on and off one by one and all at the end\n"
+	"  -t  --test              test all leds turning them on and off one by one\n"
 	"  -i  --info-values       inform about actual setted brightness\n"
 	, program_name
 	);
@@ -251,6 +249,8 @@ int main(int argc, char *argv[]){
 			break;
 			
 		default:
+// 			print_usage();
+// 			abort ();
 			break;
 		}
 		
