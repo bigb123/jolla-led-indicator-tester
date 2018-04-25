@@ -46,6 +46,11 @@ change_brightness() {
   done
 }
 
+bash_trap() {
+  $1 --reset
+  exit
+}
+
 main() {
   if [ $# -eq 0 ]; then
     # If no parameters given make assumption that it will be executable
@@ -71,6 +76,9 @@ main() {
 $leds_modificator_path or this file is not executable"
     usage
   fi
+
+  # Trap for CTRL+C to reset led
+  trap bash_trap $leds_modificator_path SIGINT
 
   # Execute brightness changing witt infinity loop
   while true; do

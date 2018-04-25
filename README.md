@@ -3,7 +3,10 @@
 Program to test led indicator in Jolla phone.
 
 ## Dependencies
-You need to have developer mode on your phone turned on, because the program is terminal-based and you need to have administrator privileges to set leds' brightness. Also remember to install stuff needed to compile this program. As root run:
+You need to have developer mode on your phone turned on, because the program is
+terminal-based and you need to have administrator privileges to set leds'
+brightness. Also remember to install stuff needed to compile this program. As
+root run:
 ```
 pkcon install make gcc
 ```
@@ -42,4 +45,12 @@ where:
 ```
 
 ## Observed issues
-In test mode when phone enters in energy-saving mode (the screen goes black) led can hang for a while. Turn on screen with tapping or clicking on/off button to go back to normal mode.
+In test mode when phone enters in energy-saving mode (the screen goes black)
+led can hang for a while. Turn on screen with tapping or clicking on/off button
+to go back to normal mode.
+
+
+# breath.sh
+This is short script to demonstrate how 'leds_modificator' works. You can
+execute it without parameters if it is in the same directory as compiled
+program.
