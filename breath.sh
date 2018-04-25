@@ -74,7 +74,7 @@ $leds_modificator_path or this file is not executable"
   fi
 
   # Trap for CTRL+C to reset led
-  trap 'bash_trap $leds_modificator_path' SIGINT
+  trap 'bash_trap "$leds_modificator_path"' SIGINT
 
   # Execute brightness changing witt infinity loop
   while true; do
