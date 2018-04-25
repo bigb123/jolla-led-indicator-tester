@@ -41,9 +41,18 @@ change_brightness() {
 
 main() {
   if [ $# -eq 0 ]; then
-    usage
-    exit
+    # If no parameters assume that it will be executable
+    leds_modificator_path="./leds_modificator"
+  else
+    leds_modificator_path="$1"
   fi
+
+  if [ ! -x "$leds_modificator_path" ]; then
+    echo "Trying to find program to change leds brigntness. Can't find \
+    $leds_modificator_path file or file is not executable"
+    usage
+  fi
+
 
   while getopts ':h' opt ; do
     case $opt in
@@ -53,8 +62,6 @@ main() {
         ;;
       esac
   done
-
-  leds_modificator_path="$1"
 
   change_brightness "brighten" "$leds_modificator_path" "-r"
   change_brightness "darken" "$leds_modificator_path" "-r"
