@@ -6,13 +6,17 @@
 # Parameters:
 # 1 - path to 'leds_modificator' program
 
+# No need to set it as execution is slow enough to see the the results by eye
 SLEEP_DURATION=0
 
 usage() {
   echo
   echo "Usage:"
-  echo "$0 path_to_leds_modificator"
+  echo "$0 [-h] [path_to_leds_modificator]"
   echo
+  echo "  -h display this help"
+  echo "  path_to_leds_modificator - path to 'leds_modificator' program. Not \
+necessary if executing from the same path where the 'leds_modificator' is"
 }
 
 # Change brightness of choosen led
@@ -26,12 +30,14 @@ usage() {
 #   '-g' - green
 #   '-b' - blue
 change_brightness() {
+  # Check what mode will be used
   if [ "$1" == 'brighten' ]; then
     range='{0..255}'
   else
     range='{255..0}'
   fi
 
+  # Need to use 'eval' command to evaluate string rather than use this string
   for i in $(eval echo "$range"); do
     # 'leds_modificator' execution: path_to_program color brightness_value
     "$2" "$3" "$i"
@@ -41,19 +47,14 @@ change_brightness() {
 
 main() {
   if [ $# -eq 0 ]; then
-    # If no parameters assume that it will be executable
+    # If no parameters given make assumption that it will be executable
+    # in the local environment
     leds_modificator_path="./leds_modificator"
   else
     leds_modificator_path="$1"
   fi
 
-  if [ ! -x "$leds_modificator_path" ]; then
-    echo "Trying to find program to change leds brigntness. Can't find \
-    $leds_modificator_path file or file is not executable"
-    usage
-  fi
-
-
+  # Parse help option
   while getopts ':h' opt ; do
     case $opt in
       h|\?)
@@ -63,12 +64,25 @@ main() {
       esac
   done
 
-  change_brightness "brighten" "$leds_modificator_path" "-r"
-  change_brightness "darken" "$leds_modificator_path" "-r"
-  change_brightness "brighten" "$leds_modificator_path" "-g"
-  change_brightness "darken" "$leds_modificator_path" "-g"
-  change_brightness "brighten" "$leds_modificator_path" "-b"
-  change_brightness "darken" "$leds_modificator_path" "-b"
+  # Check if file exist
+  if [ ! -x "$leds_modificator_path" ]; then
+    echo "Trying to find program to change leds brigntness. Can't find file \
+$leds_modificator_path or this file is not executable"
+    usage
+  fi
+
+  # Execute brightness changing witt infinity loop
+  while true; do
+    # Reset brightness
+    "$leds_modificator_path" --reset
+
+    change_brightness "brighten" "$leds_modificator_path" "-r"
+    change_brightness "darken" "$leds_modificator_path" "-r"
+    change_brightness "brighten" "$leds_modificator_path" "-g"
+    change_brightness "darken" "$leds_modificator_path" "-g"
+    change_brightness "brighten" "$leds_modificator_path" "-b"
+    change_brightness "darken" "$leds_modificator_path" "-b"
+  done
 }
 
 main "$@"
