@@ -6,7 +6,7 @@
 # Parameters:
 # 1 - path to 'leds_modificator' program
 
-SLEEP_DURATION=0.00001
+SLEEP_DURATION=0
 
 usage() {
   echo
