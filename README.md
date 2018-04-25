@@ -26,12 +26,12 @@ you will see that your led shines red.
 ## Usage
 
 ```
-leds_modificator [[-r 0-255] [-g 0-255] [-b 0-255]] [-t] [-v] [-h]
+leds_modificator [[-r 0-255] [-g 0-255] [-b 0-255]] [-t] [-v] [-h] [-t]
 
 Program to test RGB led indicator in Jolla phone
 
 Usage: leds_modificator options [value (from 0 to 255)]
-where: 
+where:
   -h  --help              display this help message
   -r  --red               set red led brightness
   -g  --green             set green led brightness
