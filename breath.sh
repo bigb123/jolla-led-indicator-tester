@@ -6,9 +6,6 @@
 # Parameters:
 # 1 - path to 'leds_modificator' program
 
-# No need to set it as execution is slow enough to see the the results by eye
-SLEEP_DURATION=0
-
 usage() {
   echo "Usage:"
   echo "$0 [-h] [path_to_leds_modificator]"
@@ -42,7 +39,6 @@ change_brightness() {
   for i in $(eval echo "$range"); do
     # 'leds_modificator' execution: path_to_program color brightness_value
     "$2" "$3" "$i"
-    sleep "$SLEEP_DURATION"
   done
 }
 
