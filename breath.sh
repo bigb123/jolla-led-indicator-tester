@@ -12,10 +12,12 @@ SLEEP_DURATION=0
 usage() {
   echo "Usage:"
   echo "$0 [-h] [path_to_leds_modificator]"
+  echo
+  echo "Where:"
   echo "  -h display this help"
   echo "  path_to_leds_modificator - path to 'leds_modificator' program. Not"
-  echo "      necessary if executing from the same path where the"
-  echo "      'leds_modificator' is located"
+  echo "                             necessary if executing from the same path"
+  echo "                             where the 'leds_modificator' is located"
 }
 
 # Change brightness of choosen led
