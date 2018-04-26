@@ -2,6 +2,8 @@
 
 Program to test led indicator in Jolla phone.
 
+It is designed to be built and run on Jolla phone.
+
 ## Dependencies
 You need to have developer mode on your phone turned on, because the program is
 terminal-based and you need to have administrator privileges to set leds'
